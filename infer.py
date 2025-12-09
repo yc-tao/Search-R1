@@ -6,8 +6,16 @@ import requests
 
 question = "Mike Barnett negotiated many contracts including which player that went on to become general manager of CSKA Moscow of the Kontinental Hockey League?"
 
+# Documents to search within - replace with your actual documents
+# Each document should have an 'id' and 'contents' field
+# Format: {"id": "unique_id", "contents": "\"Document Title\"\nDocument text content..."}
+DOCUMENTS = [
+    {"id": "0", "contents": "\"Example Document 1\"\nThis is the first example document."},
+    {"id": "1", "contents": "\"Example Document 2\"\nThis is the second example document."}
+]
+
 # Model ID and device setup
-model_id = "PeterJinGo/SearchR1-nq_hotpotqa_train-qwen2.5-7b-em-ppo"
+model_id = "Qwen/Qwen2.5-7B-Instruct"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 question = question.strip()
@@ -25,7 +33,7 @@ If you find no further external knowledge needed, you can directly provide the a
 
 # Initialize the tokenizer and model
 tokenizer = transformers.AutoTokenizer.from_pretrained(model_id)
-model = transformers.AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.bfloat16, device_map="auto")
+model = transformers.AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.bfloat16, device_map=0)
 
 # Define the custom stopping criterion
 class StopOnSequence(transformers.StoppingCriteria):
@@ -58,18 +66,37 @@ def get_query(text):
     else:
         return None
 
-def search(query: str):
+def search(query: str, documents: list = None):
+    """
+    Search for relevant documents given a query.
+
+    Args:
+        query: The search query string
+        documents: List of documents to search within. Each document should be a dict with 'id' and 'contents' keys.
+                   Example: [{"id": "0", "contents": "\"Title\"\nDocument text..."}, ...]
+
+    Returns:
+        Formatted string of search results
+    """
+    if documents is None:
+        # Default example documents - replace with your actual documents
+        documents = [
+            {"id": "0", "contents": "\"Example Document 1\"\nThis is the first example document."},
+            {"id": "1", "contents": "\"Example Document 2\"\nThis is the second example document."}
+        ]
+
     payload = {
-            "queries": [query],
-            "topk": 3,
-            "return_scores": True
-        }
-    results = requests.post("http://127.0.0.1:8000/retrieve", json=payload).json()['result']
-                
+        "queries": [query],
+        "documents": documents,
+        "topk": 3,
+        "return_scores": True
+    }
+    results = requests.post("http://127.0.0.1:56321/retrieve", json=payload).json()['result']
+
     def _passages2string(retrieval_result):
         format_reference = ''
         for idx, doc_item in enumerate(retrieval_result):
-                        
+
             content = doc_item['document']['contents']
             title = content.split("\n")[0]
             text = "\n".join(content.split("\n")[1:])
@@ -102,7 +129,7 @@ while True:
         max_new_tokens=1024,
         stopping_criteria=stopping_criteria,
         pad_token_id=tokenizer.eos_token_id,
-        do_sample=True,
+        do_sample=False,
         temperature=0.7
     )
 
@@ -118,7 +145,7 @@ while True:
     tmp_query = get_query(tokenizer.decode(outputs[0], skip_special_tokens=True))
     if tmp_query:
         # print(f'searching "{tmp_query}"...')
-        search_results = search(tmp_query)
+        search_results = search(tmp_query, documents=DOCUMENTS)
     else:
         search_results = ''
 

@@ -410,7 +410,7 @@ class RayPPOTrainer(object):
         self.val_dataloader = DataLoader(dataset=self.val_dataset,
                                          batch_size=self.config.data.val_batch_size,
                                          shuffle=False,
-                                         drop_last=True,
+                                         drop_last=False,  # keep a partial batch so small val sets still run
                                          collate_fn=collate_fn)
 
         print(f'Size of train dataloader: {len(self.train_dataloader)}')
@@ -452,6 +452,7 @@ class RayPPOTrainer(object):
             no_think_rl=self.config.algorithm.no_think_rl,
             search_url = self.config.retriever.url,
             topk = self.config.retriever.topk,
+            use_mock_retrieval = getattr(self.config, 'use_mock_retrieval', False),
         )
 
         # Agent config preparation
@@ -510,11 +511,19 @@ class RayPPOTrainer(object):
                 }
                 with _timer('step', timing_raw):
                     first_input_ids = test_gen_batch.batch['input_ids'][:, -gen_config.max_start_length:].clone()
+
+                    # Extract documents from test_batch for retrieval
+                    documents_list = None
+                    if 'extra_info' in test_batch.non_tensor_batch:
+                        extra_info = test_batch.non_tensor_batch['extra_info']
+                        documents_list = [item.get('documents', []) if isinstance(item, dict) else [] for item in extra_info]
+
                     with _timer('gen', timing_raw):
                         generation_manager.timing_raw = timing_raw
                         final_gen_batch_output = generation_manager.run_llm_loop(
                             gen_batch=test_gen_batch,
                             initial_input_ids=first_input_ids,
+                            documents_list=documents_list,
                         )
                     
                     test_batch = test_batch.union(final_gen_batch_output)
@@ -683,6 +692,7 @@ class RayPPOTrainer(object):
             no_think_rl=self.config.algorithm.no_think_rl,
             search_url = self.config.retriever.url,
             topk = self.config.retriever.topk,
+            use_mock_retrieval = getattr(self.config, 'use_mock_retrieval', False),
         )
 
         generation_manager = LLMGenerationManager(
@@ -724,11 +734,18 @@ class RayPPOTrainer(object):
                     else:
                         first_input_ids = gen_batch.batch['input_ids'][:, -gen_config.max_start_length:].clone().long()
 
+                        # Extract documents from batch for retrieval
+                        documents_list = None
+                        if 'extra_info' in batch.non_tensor_batch:
+                            extra_info = batch.non_tensor_batch['extra_info']
+                            documents_list = [item.get('documents', []) if isinstance(item, dict) else [] for item in extra_info]
+
                         with _timer('gen', timing_raw):
                             generation_manager.timing_raw = timing_raw
                             final_gen_batch_output = generation_manager.run_llm_loop(
                                 gen_batch=gen_batch,
                                 initial_input_ids=first_input_ids,
+                                documents_list=documents_list,
                             )
 
                         # final_gen_batch_output.batch.apply(lambda x: x.long(), inplace=True)

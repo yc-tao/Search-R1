@@ -18,8 +18,28 @@ tensorflow/my_graph/*
 # C extensions
 *.so
 data
+data/
+dataset/
+datasets/
+**/data/
+**/dataset/
+**/datasets/
 sft/output/*
 sft/data/*
+
+# Data files
+*.csv
+*.tsv
+*.parquet
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.jsonl
+*.arrow
+*.feather
 
 # Distribution / packaging
 .Python

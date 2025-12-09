@@ -1,0 +1,339 @@
+================================================================================
+MEDICAL DIAGNOSIS REPORT - EPISODE 436372
+================================================================================
+
+Question: Diagnose all conditions that happened during this patient's hospitalization stay.
+
+Total document pieces available: 76
+Number of searches performed: 2
+
+--------------------------------------------------------------------------------
+INITIAL SUMMARY (from last section of note):
+--------------------------------------------------------------------------------
+**Summary of Diagnoses and Conditions:**
+
+- **Primary Diagnosis:** Colorectal cancer (colon cancer) post-laparoscopic sigmoidectomy and coloproctostomy
+- **Secondary Conditions:**
+  - Hypoxemia
+  - Diabetes Mellitus, Type II
+  - Hypertension, Benign
+  - Alcohol Abuse
+  - Obstructive Sleep Apnea (OSA)
+  - Volume Overload
+  - Potential Pulmonary Edema
+  - Hypercarbia
+  - Hyperlipidemia
+
+**Key Findings:**
+- The patient is a 63-year-old male with a history of diabetes, hypertension, alcohol abuse, and obesity.
+- Post-operative hypoxia is likely due to volume overload and potential pulmonary edema.
+- Hypercarbia is attributed to OSA and obesity.
+- Persistent hypertension and tachycardia are managed with beta-blockers and ACE inhibitors.
+- The patient is on prophylactic heparin for deep vein thrombosis (DVT).
+
+**Plan:**
+- Maximize control of blood pressure and heart rate.
+- Monitor and manage fluid balance.
+- Consider CPAP or BiPAP if hypoxia persists.
+- Continue pain management and wound care.
+- Maintain glycemic control and nutrition.
+- Monitor for signs of alcohol withdrawal.
+
+--------------------------------------------------------------------------------
+SEARCH QUERIES:
+--------------------------------------------------------------------------------
+1. signs and symptoms of hypertension
+2. symptoms and conditions associated with hypertension
+
+--------------------------------------------------------------------------------
+RETRIEVED PASSAGES (Top 3 per query):
+--------------------------------------------------------------------------------
+
+Passage 1 (ID: episode_436372_piece_55, Score: 9.06):
+"Note Piece 55"
+Will transition from
+   IV to PO BBL and resume ACEI. No clear signs of nosocomial pneumonia
+   except rising WBCs, will check sputum, mobilize OOB, and hold off on
+   antibiotics. Discontinue ativan as he does not have symptoms of
+   withdrawal at this point. CPAP at night for known OSA. POC per surgical
+   team; ADAT. Above confirmed with Dr. [**Last Name (STitle) **] via email and with surgical
+   HS at bedside. Remainder of plan as outlined above.
+
+Passage 2 (ID: episode_436372_piece_54, Score: 3.33):
+"Note Piece 54"
+CXR with B perihilar fullness and L>R ASD. CTA (wet read)
+   without clear central clot, subpulmonic loculated effusion on L,
+   perihilar / dependent GG changes. Agree with plan to manage acute respiratory distress with HR/BP control
+   with labetalol IV and lasix for likely volume overload and element of
+   acute diastolic heart failure given preserved EF on recent echo. No
+   clear signs of nosocomial pneumonia, will check sputum and hold off on
+   antibiotics. Will f/u CTA read.
+
+Passage 3 (ID: episode_436372_piece_14, Score: 3.28):
+"Note Piece 14"
+CTA (wet read)
+   without clear central clot, subpulmonic loculated effusion on L,
+   perihilar / dependent GG changes. Agree with plan to manage acute respiratory distress with HR/BP control
+   with labetalol IV and lasix for likely volume overload and element of
+   acute diastolic heart failure given preserved EF on recent echo. No
+   clear signs of nosocomial pneumonia, will check sputum and hold off on
+   antibiotics. Will f/u CTA read. Ativan for possible withdrawal per
+   CIWA.
+
+Passage 5 (ID: episode_436372_piece_7, Score: 4.22):
+"Note Piece 7"
+Occupation: retired; worked for [**Last Name (un) 5686**] [**Doctor Last Name 5687**] previously
+   Drugs: none
+   Tobacco: quit >20 yrs ago
+   Alcohol: 4-6 beers/day
+   Other: married
+   Review of systems:
+   Constitutional: No(t) Fatigue, No(t) Fever
+   Ear, Nose, Throat: Dry mouth
+   Cardiovascular: No(t) Chest pain, No(t) Palpitations, No(t) Edema,
+   Tachycardia, Orthopnea
+   Respiratory: No(t) Cough, Dyspnea, No(t) Tachypnea, No(t) Wheeze
+   Gastrointestinal: Abdominal pain, No(t) Nausea, No(t) Emesis,
+   Constipation
+   Genitourinary: No(t) Dysuria
+   Neurologic: No(t) Headache
+   Pain: [**2-20**] Mild
+   Flowsheet Data as of [**2115-1-30**] 01:43 AM
+   Vital Signs
+   Hemodynamic monitoring
+   Fluid Balance
+                                                                  24 hours
+                                                               Since 12 AM
+   Tmax: 37.4
+C (99.3
+   Tcurrent: 37.4
+C (99.3
+   HR: 101 (101 - 101) bpm
+   BP: 171/72(94) {171/72(94) - 187/73(104)} mmHg
+   RR: 25 (25 - 25) insp/min
+   SpO2: 93%
+   Heart rhythm: ST (Sinus Tachycardia)
+             Total In:
+             13 mL
+   PO:
+             TF:
+   IVF:
+   13 mL
+   Blood products:
+   Total out:
+                                                                      0 mL
+                                                                    770 mL
+   Urine:
+   770 mL
+   NG:
+   Stool:
+   Drains:
+   Balance:
+                                                                      0 mL
+                                                                   -757 mL
+   Respiratory
+   O2 Delivery Device: Non-rebreather
+   SpO2: 93%
+   Physical Examination
+   General Appearance: Well nourished, Overweight / Obese, Diaphoretic
+   Eyes / Conjunctiva: PERRL
+   Head, Ears, Nose, Throat: Normocephalic
+   Cardiovascular: (PMI Normal), (S1: Normal), (S2: Normal), tachycardiac
+   Peripheral Vascular: (Right radial pulse: Present), (Left radial pulse:
+   Present), (Right DP pulse: Present), (Left DP pulse: Present)
+   Respiratory / Chest: (Expansion: Symmetric), (Breath Sounds: Crackles :
+   bilateral bases, Diminished: )
+   Abdominal: Soft, Distended, Obese, hypoactive bowel sounds
+   Extremities: Right: Trace, Left: Trace, Cyanosis
+   Skin:  Warm
+   Neurologic: Attentive, Follows simple commands, Responds to: Not
+   assessed, Oriented (to): A/O x 3, Movement: Not assessed, Tone: Not
+   assessed, resting tremor noted
+   Labs / Radiology
+   264 K/uL
+   11.4 g/dL
+   35.9 %
+   14.4 K/uL
+        [image002.jpg]
+                                  [**2111-12-21**]
+                          2:33 A2/11/[**2114**]  01:00 AM
+                                  [**2111-12-25**]
+                                   10:20 P
+                                  [**2111-12-26**]
+                                   1:20 P
+                                  [**2111-12-27**]
+                                   11:50 P
+                                  [**2111-12-28**]
+                                   1:20 A
+                                  [**2111-12-29**]
+                                   7:20 P
+                                  1//11/006
+                                   1:23 P
+                                  [**2112-1-21**]
+                                   1:20 P
+                                  [**2112-1-21**]
+                                   11:20 P
+                                  [**2112-1-21**]
+                                   4:20 P
+   WBC
+                                    14.4
+   Hct
+                                    35.9
+   Plt
+                                     264
+   Imaging: CXR: poor inspiratory effort; slightly rotated. no lines. left pleural effusion. bilateral infiltrates likely c/w pulm edema
+   associated with hilar fullness
+   ECHO: IMPRESSION: Suboptimal image quality. Normal biventricular cavity
+   sizes with preserved global biventricular systolic function. No
+   definite pathologic flow identified. Microbiology: none
+   ECG: ECG: poor baseline; appears to be sinus tachycardia- cannot
+   determine whether there are ischemic changes
+   Assessment and Plan
+   Assesment: This is a 63 year-old male with a history of DM2, HTN, HLP,
+   ETOH abuse, obesity, OSA on CPAP who is transferred to the ICU for
+   hypoxia s/p laparoscopic sigmoidectomy and coloproctostomy
+   Plan:
+   # Hypoxia: most likely etiology is volume overload in the setting of
+   IVFs intra and postoperatively. ECHo recently done with normal EF.
+
+Passage 6 (ID: episode_436372_piece_23, Score: 4.22):
+"Note Piece 23"
+Occupation: retired; worked for [**Last Name (un) 5686**] [**Doctor Last Name 5687**] previously
+   Drugs: none
+   Tobacco: quit >20 yrs ago
+   Alcohol: 4-6 beers/day
+   Other: married
+   Review of systems:
+   Constitutional: No(t) Fatigue, No(t) Fever
+   Ear, Nose, Throat: Dry mouth
+   Cardiovascular: No(t) Chest pain, No(t) Palpitations, No(t) Edema,
+   Tachycardia, Orthopnea
+   Respiratory: No(t) Cough, Dyspnea, No(t) Tachypnea, No(t) Wheeze
+   Gastrointestinal: Abdominal pain, No(t) Nausea, No(t) Emesis,
+   Constipation
+   Genitourinary: No(t) Dysuria
+   Neurologic: No(t) Headache
+   Pain: [**2-20**] Mild
+   Flowsheet Data as of [**2115-1-30**] 01:43 AM
+   Vital Signs
+   Hemodynamic monitoring
+   Fluid Balance
+                                                                  24 hours
+                                                               Since 12 AM
+   Tmax: 37.4
+C (99.3
+   Tcurrent: 37.4
+C (99.3
+   HR: 101 (101 - 101) bpm
+   BP: 171/72(94) {171/72(94) - 187/73(104)} mmHg
+   RR: 25 (25 - 25) insp/min
+   SpO2: 93%
+   Heart rhythm: ST (Sinus Tachycardia)
+             Total In:
+             13 mL
+   PO:
+             TF:
+   IVF:
+   13 mL
+   Blood products:
+   Total out:
+                                                                      0 mL
+                                                                    770 mL
+   Urine:
+   770 mL
+   NG:
+   Stool:
+   Drains:
+   Balance:
+                                                                      0 mL
+                                                                   -757 mL
+   Respiratory
+   O2 Delivery Device: Non-rebreather
+   SpO2: 93%
+   Physical Examination
+   General Appearance: Well nourished, Overweight / Obese, Diaphoretic
+   Eyes / Conjunctiva: PERRL
+   Head, Ears, Nose, Throat: Normocephalic
+   Cardiovascular: (PMI Normal), (S1: Normal), (S2: Normal), tachycardiac
+   Peripheral Vascular: (Right radial pulse: Present), (Left radial pulse:
+   Present), (Right DP pulse: Present), (Left DP pulse: Present)
+   Respiratory / Chest: (Expansion: Symmetric), (Breath Sounds: Crackles :
+   bilateral bases, Diminished: )
+   Abdominal: Soft, Distended, Obese, hypoactive bowel sounds
+   Extremities: Right: Trace, Left: Trace, Cyanosis
+   Skin:  Warm
+   Neurologic: Attentive, Follows simple commands, Responds to: Not
+   assessed, Oriented (to): A/O x 3, Movement: Not assessed, Tone: Not
+   assessed, resting tremor noted
+   Labs / Radiology
+   264 K/uL
+   11.4 g/dL
+   35.9 %
+   14.4 K/uL
+        [image002.jpg]
+                                  [**2111-12-21**]
+                          2:33 A2/11/[**2114**]  01:00 AM
+                                  [**2111-12-25**]
+                                   10:20 P
+                                  [**2111-12-26**]
+                                   1:20 P
+                                  [**2111-12-27**]
+                                   11:50 P
+                                  [**2111-12-28**]
+                                   1:20 A
+                                  [**2111-12-29**]
+                                   7:20 P
+                                  1//11/006
+                                   1:23 P
+                                  [**2112-1-21**]
+                                   1:20 P
+                                  [**2112-1-21**]
+                                   11:20 P
+                                  [**2112-1-21**]
+                                   4:20 P
+   WBC
+                                    14.4
+   Hct
+                                    35.9
+   Plt
+                                     264
+   Imaging: CXR: poor inspiratory effort; slightly rotated. no lines. left pleural effusion. bilateral infiltrates likely c/w pulm edema
+   associated with hilar fullness
+   ECHO: IMPRESSION: Suboptimal image quality. Normal biventricular cavity
+   sizes with preserved global biventricular systolic function. No
+   definite pathologic flow identified. Microbiology: none
+   ECG: ECG: poor baseline; appears to be sinus tachycardia- cannot
+   determine whether there are ischemic changes
+   Assessment and Plan
+   Assesment: This is a 63 year-old male with a history of DM2, HTN, HLP,
+   ETOH abuse, obesity, OSA on CPAP who is transferred to the ICU for
+   hypoxia s/p laparoscopic sigmoidectomy and coloproctostomy
+   Plan:
+   # Hypoxia: most likely etiology is volume overload in the setting of
+   IVFs intra and postoperatively. ECHo recently done with normal EF.
+
+--------------------------------------------------------------------------------
+LLM REASONING:
+--------------------------------------------------------------------------------
+
+Reasoning block 1:
+- Hypertension is defined as a persistent systolic blood pressure of 140 mmHg or higher, or diastolic blood pressure of 90 mmHg or higher.
+- Without specific blood pressure measurements or medical records, it's impossible to diagnose hypertension.
+
+Reasoning block 2:
+- The notes do not mention blood pressure readings directly.
+- There is no explicit mention of hypertension or its management.
+- However, one note mentions "acute diastolic heart failure" which could be related to hypertension, but this is not definitive.
+
+================================================================================
+FINAL DIAGNOSIS:
+================================================================================
+The patient has hypertension.
+
+================================================================================
+CLASSIFIED PHENOTYPES:
+================================================================================
+1. Essential hypertension
+2. Hypertension with complications and secondary hypertension
+
+================================================================================

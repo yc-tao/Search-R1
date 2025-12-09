@@ -178,3 +178,6 @@ trainer:
 
 max_turns: 10
 do_search: true
+# Search-count specific knobs
+max_searches: 10
+use_mock_retrieval: true

@@ -14,13 +14,14 @@ import requests
 class GenerationConfig:
     max_turns: int
     max_start_length: int
-    max_prompt_length: int 
+    max_prompt_length: int
     max_response_length: int
     max_obs_length: int
     num_gpus: int
     no_think_rl: bool=False
     search_url: str = None
     topk: int = 3
+    use_mock_retrieval: bool = False  # If True, use mock retrieval instead of real server
 
 class LLMGenerationManager:
     def __init__(
@@ -217,12 +218,22 @@ class LLMGenerationManager:
         padded_output.batch = trimmed_batch
         return padded_output
 
-    def run_llm_loop(self, gen_batch, initial_input_ids: torch.Tensor) -> Tuple[Dict, Dict]:
-        """Run main LLM generation loop."""
-        
+    def run_llm_loop(self, gen_batch, initial_input_ids: torch.Tensor, documents_list: List[List[Dict]] = None) -> Tuple[Dict, Dict]:
+        """Run main LLM generation loop.
+
+        Args:
+            gen_batch: Batch of generation data
+            initial_input_ids: Initial input token IDs
+            documents_list: List of document lists, one per example in batch. Each document list
+                          contains dicts with 'id' and 'contents' fields for retrieval.
+        """
+
+        # Store documents for use in batch_search
+        self.current_documents = documents_list
+
         original_left_side = {'input_ids': initial_input_ids[:, -self.config.max_start_length:]}
         original_right_side = {'responses': initial_input_ids[:, []], 'responses_with_info_mask': initial_input_ids[:, []]}
-        
+
         active_mask = torch.ones(gen_batch.batch['input_ids'].shape[0], dtype=torch.bool)
         turns_stats = torch.ones(gen_batch.batch['input_ids'].shape[0], dtype=torch.int)
         valid_action_stats = torch.zeros(gen_batch.batch['input_ids'].shape[0], dtype=torch.int)
@@ -355,21 +366,32 @@ class LLMGenerationManager:
         Execute predictions across multiple environments.
         NOTE: the function is the actual `step` function in the environment
         NOTE penalty_for_invalid is not included in observation shown to the LLM
-        
+
         Args:
             envs: List of environment instances
             predictions: List of action predictions
             pad_token: Token to use for padding
-            
+
         Returns:
             List of observation strings
         """
         cur_actions, contents = self.postprocess_predictions(predictions)
         next_obs, dones, valid_action, is_search = [], [], [], []
-        
-        search_queries = [content for action, content in zip(cur_actions, contents) if action == 'search']
+
+        # Extract search queries and their corresponding documents
+        search_queries = []
+        search_documents = []
+        for i, (action, content) in enumerate(zip(cur_actions, contents)):
+            if action == 'search':
+                search_queries.append(content)
+                # Get documents for this example (if available)
+                if self.current_documents is not None and i < len(self.current_documents):
+                    search_documents.append(self.current_documents[i])
+                else:
+                    search_documents.append([])  # Empty list if no documents available
+
         if do_search:
-            search_results = self.batch_search(search_queries)
+            search_results = self.batch_search(search_queries, search_documents)
             assert len(search_results) == sum([1 for action in cur_actions if action == 'search'])
         else:
             search_results = [''] * sum([1 for action in cur_actions if action == 'search'])
@@ -435,26 +457,59 @@ If I want to give the final answer, I should put the answer between <answer> and
             
         return actions, contents
 
-    def batch_search(self, queries: List[str] = None) -> str:
+    def _mock_search_result(self, query: str) -> str:
+        """Generate a mock search result for training without retrieval server."""
+        templates = [
+            f"Doc 1(Title: Information) Relevant information for query '{query[:50]}': "
+            f"Content retrieved based on the search query.",
+            f"Doc 2(Title: Reference) Additional reference for '{query[:50]}': "
+            f"Supplementary information from the knowledge base.",
+            f"Doc 3(Title: Context) Contextual data regarding '{query[:50]}': "
+            f"Background information to support reasoning.",
+        ]
+        return "\n".join(templates)
+
+    def batch_search(self, queries: List[str] = None, documents: List[List[Dict]] = None) -> str:
         """
         Batchified search for queries.
         Args:
             queries: queries to call the search engine
+            documents: list of document lists (one per query) to search within
         Returns:
             search results which is concatenated into a string
         """
-        results = self._batch_search(queries)['result']
-        
-        return [self._passages2string(result) for result in results]
+        if queries is None or len(queries) == 0:
+            return []
 
-    def _batch_search(self, queries):
-        
+        # Use mock retrieval if configured
+        if self.config.use_mock_retrieval:
+            return [self._mock_search_result(query) for query in queries]
+
+        # Use real retrieval server
+        try:
+            results = self._batch_search(queries, documents)['result']
+            return [self._passages2string(result) for result in results]
+        except Exception as e:
+            print(f"[LLMGenerationManager] Retrieval failed, using mock: {e}")
+            return [self._mock_search_result(query) for query in queries]
+
+    def _batch_search(self, queries, documents):
+        """Execute batch search with queries and documents.
+
+        Args:
+            queries: List of query strings
+            documents: List of document lists (one per query)
+
+        Returns:
+            JSON response from retrieval server
+        """
         payload = {
             "queries": queries,
+            "documents": documents,
             "topk": self.config.topk,
             "return_scores": True
         }
-        
+
         return requests.post(self.config.search_url, json=payload).json()
 
     def _passages2string(self, retrieval_result):
