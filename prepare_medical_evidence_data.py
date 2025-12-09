@@ -16,6 +16,8 @@ Output:
 - data/medical_evidence/test.parquet
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import os
