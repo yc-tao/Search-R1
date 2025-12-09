@@ -34,13 +34,18 @@ from tqdm import tqdm
 
 def load_pickle_with_numpy(path: str) -> Any:
     """Load pickle files that depend on NumPy internals (shim for NumPy 2.x pickles)."""
-    import numpy as np  # Local import to avoid polluting sys.modules globally
+    import pickle
 
-    sys.modules['numpy._core'] = np.core
-    sys.modules['numpy._core.numeric'] = np.core.numeric
+    # Custom unpickler to handle numpy._core -> numpy.core redirects
+    class CompatUnpickler(pickle.Unpickler):
+        def find_class(self, module, name):
+            # Redirect numpy._core imports to numpy.core for compatibility
+            if module.startswith('numpy._core'):
+                module = module.replace('numpy._core', 'numpy.core')
+            return super().find_class(module, name)
 
     with open(path, 'rb') as f:
-        return pickle.load(f)
+        return CompatUnpickler(f).load()
 
 
 def load_concatenated_notes(path: str) -> Dict[str, str]:
@@ -48,14 +53,50 @@ def load_concatenated_notes(path: str) -> Dict[str, str]:
     print(f"[prepare] Loading concatenated notes from {path} ...")
     data = load_pickle_with_numpy(path)
 
-    if isinstance(data, dict):
+    if isinstance(data, pd.DataFrame):
+        formatted: Dict[str, str] = {}
+
+        # Use exact column names from the pickle file
+        if 'HADM_ID' not in data.columns:
+            raise ValueError(
+                f"Expected 'HADM_ID' column in concatenated notes DataFrame. "
+                f"Found columns: {list(data.columns)}"
+            )
+
+        if 'TEXT' not in data.columns:
+            raise ValueError(
+                f"Expected 'TEXT' column in concatenated notes DataFrame. "
+                f"Found columns: {list(data.columns)}"
+            )
+
+        print(f"[prepare] Found {len(data)} rows with HADM_ID and TEXT columns")
+
+        # Map hadm_id to concatenated text
+        for _, row in data.iterrows():
+            hadm_id = row['HADM_ID']
+            note_text = row['TEXT']
+
+            # Skip rows with missing hadm_id or text
+            if pd.isna(hadm_id) or not isinstance(note_text, str) or not note_text.strip():
+                continue
+
+            # Convert hadm_id to string (it's float64 in the pickle)
+            hadm_id_str = str(int(hadm_id))
+
+            # If multiple rows have the same HADM_ID, concatenate their text
+            if hadm_id_str in formatted:
+                formatted[hadm_id_str] += "\n\n" + note_text
+            else:
+                formatted[hadm_id_str] = note_text
+
+    elif isinstance(data, dict):
         formatted = {str(k): v for k, v in data.items() if isinstance(v, str)}
     elif isinstance(data, list):
         formatted = {str(idx): note for idx, note in enumerate(data) if isinstance(note, str)}
     else:
         raise ValueError(f"Unexpected format for concatenated notes: {type(data)}")
 
-    print(f"[prepare] Loaded {len(formatted)} concatenated episodes")
+    print(f"[prepare] Loaded {len(formatted)} unique hadm_id episodes")
     return formatted
 
 
@@ -184,6 +225,9 @@ def chunk_note_with_positions(
     start_idx = 0
     word_count = 0
 
+    # Ensure note_id is always a string for consistent parquet serialization
+    note_id_str = str(note_id)
+
     def add_chunk(chunk_start_idx: int, chunk_end_idx: int):
         ext_start_idx = max(0, chunk_start_idx - context_sentences)
         ext_end_idx = min(len(spans) - 1, chunk_end_idx + context_sentences)
@@ -192,13 +236,13 @@ def chunk_note_with_positions(
         chunk_text = note_text[start_char:end_char]
         chunk_idx = len(documents)
 
-        title = f"HADM {hadm_id} NOTE {note_id} CHUNK {chunk_idx} [{start_char}:{end_char}]"
+        title = f"HADM {hadm_id} NOTE {note_id_str} CHUNK {chunk_idx} [{start_char}:{end_char}]"
         documents.append({
-            "id": f"hadm_{hadm_id}_note_{note_id}_chunk_{chunk_idx}",
+            "id": f"hadm_{hadm_id}_note_{note_id_str}_chunk_{chunk_idx}",
             "contents": f"\"{title}\"\n{chunk_text}",
             "metadata": {
                 "hadm_id": hadm_id,
-                "note_id": note_id,
+                "note_id": note_id_str,
                 "char_start": start_char,
                 "char_end": end_char,
                 "chunk_index": chunk_idx,
@@ -272,7 +316,9 @@ def build_record(
         "ability": "medical-reasoning",
         "reward_model": {
             "style": "rule",
-            "ground_truth": {}
+            "ground_truth": {
+                "evidence_present": bool(evidence_spans)
+            }
         },
         "extra_info": {
             "hadm_id": hadm_id,
